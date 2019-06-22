@@ -32,6 +32,10 @@
                 { frameWidth: 32, frameHeight: 48 }
             );
             this.load.image('star', 'assets/star.png');
+            this.load.spritesheet('cat',
+                'assets/cat.png',
+                { frameWidth: 32, frameHeight: 40 }
+            );
         }
         var player;
         var platforms;
@@ -65,7 +69,26 @@
             });
 
 
-            player = this.physics.add.sprite(100, 450, 'dude');
+            this.anims.create({
+                key: 'catleft',
+                frames: this.anims.generateFrameNumbers('cat', { start: 9, end: 16 }),
+                frameRate: 10,
+                repeat: -1
+            });
+            this.anims.create({
+                key: 'catturn',
+                frames: [{ key: 'cat', frame: 8 }],
+                frameRate: 20
+            });
+
+            this.anims.create({
+                key: 'catright',
+                frames: this.anims.generateFrameNumbers('cat', { start: 0, end: 7 }),
+                frameRate: 10,
+                repeat: -1
+            });
+
+            player = this.physics.add.sprite(100, 450, 'cat');
             player.setBounce(0.2);
             player.setCollideWorldBounds(true);
             this.physics.add.collider(player, platforms);
@@ -88,17 +111,17 @@
             if (cursors.left.isDown) {
                 player.setVelocityX(-160);
 
-                player.anims.play('left', true);
+                player.anims.play('catleft', true);
             }
             else if (cursors.right.isDown) {
                 player.setVelocityX(160);
 
-                player.anims.play('right', true);
+                player.anims.play('catright', true);
             }
             else {
                 player.setVelocityX(0);
 
-                player.anims.play('turn');
+                player.anims.play('catturn');
             }
             if (cursors.up.isDown && player.body.touching.down) {
                 player.setVelocityY(-330);
